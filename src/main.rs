@@ -61,7 +61,7 @@ fn run_init(cfg: &Config) -> ! {
     // We can now set up the remaining namespaces and perform mounts.
     nix::sched::unshare(nix::sched::CloneFlags::CLONE_NEWNS).expect("failed to unshare()");
 
-    // First, we need to get a read-only rootfs.
+    // First, we need to get a read-write rootfs.
     // Mounting with MS_BIND ignored MS_RDONLY, but MS_REMOUNT respects it.
 
     nix::mount::mount(
@@ -82,7 +82,6 @@ fn run_init(cfg: &Config) -> ! {
         None::<&str>,
         nix::mount::MsFlags::MS_REMOUNT
             | nix::mount::MsFlags::MS_BIND
-            | nix::mount::MsFlags::MS_RDONLY
             | nix::mount::MsFlags::MS_NOSUID
             | nix::mount::MsFlags::MS_NODEV,
         None::<&str>,
